@@ -254,7 +254,9 @@ export function AppSidebar() {
           isCollapsed ? "justify-center p-2" : "flex-col"
         )}>
           <div className={cn("flex items-center", isCollapsed ? "justify-center" : "gap-2")}>
-            <Zap className="h-4 w-4 text-blue-500 shrink-0" title={isCollapsed ? "2台设备在线" : undefined} />
+            <div title={isCollapsed ? "2台设备在线" : undefined} className="flex items-center justify-center">
+            <Zap className="h-4 w-4 text-blue-500 shrink-0" />
+          </div>
             {!isCollapsed && <span className="text-xs font-medium truncate">设备状态</span>}
           </div>
           {!isCollapsed && (
