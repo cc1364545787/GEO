@@ -115,7 +115,7 @@ export default function DiscoveryPage() {
 
             {/* 分析按钮 */}
             <Button
-              className="w-full gap-2"
+              className="w-full gap-2 cursor-pointer"
               onClick={startAnalysis}
               disabled={!brandName || isAnalyzing}
             >

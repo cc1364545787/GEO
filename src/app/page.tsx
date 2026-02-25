@@ -1,5 +1,6 @@
 'use client';
 
+import { Fragment } from 'react'; // 方案A：引入它
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -163,65 +164,68 @@ export default function DashboardPage() {
       </div>
 
       {/* 快速上手向导 */}
-      <Card className="mb-6 border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/30 dark:to-purple-950/30">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-blue-500" />
-              <CardTitle className="text-base">快速上手向导</CardTitle>
+{/* 快速上手向导 - 修复 Fragment 和自适应 */}
+<Card className="mb-6 border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/30 dark:to-purple-950/30 min-w-0">
+  <CardHeader className="pb-3">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <Zap className="h-5 w-5 text-blue-500" />
+        <CardTitle className="text-base">快速上手向导</CardTitle>
+      </div>
+      <Badge variant="secondary" className="whitespace-nowrap">进行中 (1/8)</Badge>
+    </div>
+    <CardDescription>
+      按照以下步骤完成您的第一次GEO优化，预计需要10分钟
+    </CardDescription>
+  </CardHeader>
+  
+  <CardContent>
+    <div className="flex items-center justify-between w-full gap-0 overflow-x-auto pb-4 no-scrollbar">
+      {workflowSteps.map((step, index) => (
+        // 使用简写 Fragment <> 解决 React 变量报错
+        <Fragment key={step.title}>
+          <div className="flex flex-col items-center gap-2 shrink-0">
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all ${
+                step.status === 'completed'
+                  ? 'border-green-500 bg-green-500 text-white'
+                  : step.status === 'in_progress'
+                  ? 'border-blue-500 bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]'
+                  : 'border-muted-foreground/30 bg-background'
+              }`}
+            >
+              {step.status === 'completed' ? (
+                <CheckCircle2 className="h-5 w-5" />
+              ) : (
+                <step.icon className={`h-5 w-5 ${step.status === 'in_progress' ? '' : 'text-muted-foreground'}`} />
+              )}
             </div>
-            <Badge variant="secondary">进行中 (1/8)</Badge>
+            <span className={`text-[10px] md:text-xs font-medium whitespace-nowrap ${
+              step.status === 'in_progress' ? 'text-blue-500' : 'text-muted-foreground'
+            }`}>
+              {step.title}
+            </span>
           </div>
-          <CardDescription>
-            按照以下步骤完成您的第一次GEO优化，预计需要10分钟
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between">
-            {workflowSteps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div key={step.title} className="flex items-center">
-                  <div className="flex flex-col items-center gap-2">
-                    <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors ${
-                        step.status === 'completed'
-                          ? 'border-green-500 bg-green-500 text-white'
-                          : step.status === 'in_progress'
-                          ? 'border-blue-500 bg-blue-500 text-white'
-                          : 'border-muted-foreground/30 bg-background'
-                      }`}
-                    >
-                      {step.status === 'completed' ? (
-                        <CheckCircle2 className="h-5 w-5" />
-                      ) : (
-                        <Icon className={`h-5 w-5 ${step.status === 'in_progress' ? '' : 'text-muted-foreground'}`} />
-                      )}
-                    </div>
-                    <span className={`text-xs font-medium ${
-                      step.status === 'in_progress' ? 'text-blue-500' : 'text-muted-foreground'
-                    }`}>
-                      {step.title}
-                    </span>
-                  </div>
-                  {index < workflowSteps.length - 1 && (
-                    <div className={`mx-2 h-0.5 w-12 ${
-                      step.status === 'completed' ? 'bg-green-500' : 'bg-muted-foreground/30'
-                    }`} />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <div className="mt-4 flex justify-end">
-            <Button size="sm" className="gap-2">
-              继续下一步
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
 
+          {index < workflowSteps.length - 1 && (
+            <div className="flex-1 px-2 mb-6"> {/* 保持线在圆形中间 */}
+              <div className={`h-[2px] w-full min-w-[15px] ${
+                step.status === 'completed' ? 'bg-green-500' : 'bg-muted-foreground/30'
+              }`} />
+            </div>
+          )}
+        </Fragment>
+      ))}
+    </div>
+
+    <div className="mt-4 flex justify-end">
+      <Button size="sm" className="gap-2">
+        继续下一步
+        <ArrowRight className="h-4 w-4" />
+      </Button>
+    </div>
+  </CardContent>
+</Card>
       {/* 数据统计卡片 */}
       <div className="mb-6 grid grid-cols-4 gap-4">
         {stats.map((stat) => {

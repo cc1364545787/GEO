@@ -117,7 +117,7 @@ export default function StrategyPage() {
             </div>
 
             <Button
-              className="w-full gap-2"
+              className="w-full gap-2 cursor-pointer"
               onClick={generateStrategy}
               disabled={isGenerating}
             >
