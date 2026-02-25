@@ -1,0 +1,18 @@
+# 重新创建正确的 netlify.toml
+cat > netlify.toml << 'EOF'
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# 添加 Next.js 所需的重定向规则
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/next_server"
+  status = 200
+
+# 静态资源重定向
+[[redirects]]
+  from = "/_next/*"
+  to = "/_next/:splat"
+  status = 200
+EOF

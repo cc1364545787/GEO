@@ -1,0 +1,12 @@
+mkdir -p .netlify
+
+# 创建插件配置
+cat > .netlify/plugins.json << 'EOF'
+{
+  "plugins": [
+    {
+      "package": "@netlify/plugin-nextjs"
+    }
+  ]
+}
+EOF
